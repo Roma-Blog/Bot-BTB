@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 from datetime import datetime
-import config, threading, data_manager
+import config, threading, data_manager, os
 
 data = data_manager.readData()
 list_accounts = data_manager.getListAccounts(data)
@@ -11,7 +11,9 @@ def UpdateBalance():
     global data
     global list_accounts
     data = data_manager.setBalansInData(list_accounts, data)
-    messageBalance(list_accounts, data, False)  
+    messageBalance(list_accounts, data, False)
+    if os.path.isfile("ErrorAPI.txt"):
+        ErrorMessage(data, "Проблемы с API")
     TimerUpdateBalance()
 
 ## Таймер. Кадый час запускает обновление баланса в БД
@@ -32,10 +34,9 @@ def messageBalance(list_accounts, data_json, user_id):
                 bot.send_message(id, f"Баланс аккаунта {key} {balance} руб.")
 
 ##Сообщение админу, если что то не так 
-def ErrorMessageAPI(data_json, messages):
-    print(messages)
-    for message in messages:
-        bot.send_message(data_json['admin']['account_id'], message)
+def ErrorMessage(data_json, messages):
+    bot.send_message(data_json['admin']['account_id'], messages)
+        
 
 
 bot = telebot.TeleBot(config.token_bot)

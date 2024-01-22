@@ -1,4 +1,4 @@
-import requests, bot
+import requests
 
 url = 'https://api.direct.yandex.ru/live/v4/json/'
 
@@ -28,6 +28,8 @@ def getBalance(nameAccount, data_json):
       print(r.json())
       return r.json()['data']['Accounts'][0]['Amount']
    else:
-      bot.ErrorMessageAPI(data_json, ["Код ответа:", r.status_code, "JSON:", r.json])
+      file_error = open("ErrorAPI.txt", "w+")
+      file_error.write(f"{r.status_code}, {r.json()}")
+      file_error.close()
    
    
