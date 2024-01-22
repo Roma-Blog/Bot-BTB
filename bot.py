@@ -60,7 +60,7 @@ def dialog(message):
     elif(message.text=="Узнать баланс"):
         user = message.from_user.id
         messageBalance(list_accounts, data, user)
-        bot.send_message(message.chat.id, 'Баланс обноваляется 1 раз в час')
+        bot.send_message(message.chat.id, 'Баланс обновляется 1 раз в час')
     else:
         bot.send_message(message.chat.id, 'Незнаю такой команды')
 
