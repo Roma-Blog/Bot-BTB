@@ -25,7 +25,7 @@ def TimerUpdateBalance():
 def messageBalance(list_accounts, data_json, user_id):
     now_time = datetime.now() 
     for key in list_accounts:
-        current_time = int(now_time.strftime("%H")) + data_json[key]["time_zone"]
+        current_time = int(now_time.strftime("%H")) - data_json[key]["time_zone"]
         if (current_time == config.time_mailing) or (user_id):
             balance = data_json[key]["balance"]
             for id in data_json[key]["account_id"]:
@@ -62,6 +62,6 @@ def dialog(message):
         messageBalance(list_accounts, data, user)
         bot.send_message(message.chat.id, 'Баланс обновляется 1 раз в час')
     else:
-        bot.send_message(message.chat.id, 'Незнаю такой команды')
+        bot.send_message(message.chat.id, 'Не знаю такой команды')
 
 bot.polling(none_stop=True)
