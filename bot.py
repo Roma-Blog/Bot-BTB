@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 from datetime import datetime
-import config, threading, data_manager, os
+import config, threading, data_manager, os, time
 
 data = data_manager.readData()
 list_accounts = data_manager.getListAccounts(data)
@@ -64,4 +64,10 @@ def dialog(message):
     else:
         bot.send_message(message.chat.id, 'Не знаю такой команды')
 
-bot.polling(none_stop=True)
+
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        time.sleep(3)
+        print(e)
