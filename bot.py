@@ -15,17 +15,23 @@ def UpdateBalance():
     if os.path.isfile("ErrorAPI.txt"):
         ErrorMessage(data, "Проблемы с API")
     TimerUpdateBalance()
-
+    
 ## Таймер. Кадый час запускает обновление баланса в БД
 def TimerUpdateBalance():  
-    timer_update_balance = threading.Timer(3600.0, UpdateBalance)
+    timer_update_balance = threading.Timer(float(TimeСalibration()), UpdateBalance)
     timer_update_balance.start() 
+
+def TimeСalibration():
+    if datetime.now().minute >= 1:
+        return 3660 - datetime.now().minute * 60
+    else: 
+        return 3600
 
 ## Рассылка сообщение. Если user_id имеет значение int не 0 то сообщение шлется конкретному ID аккаунту
 def messageBalance(list_accounts, data_json, user_id):
     now_time = datetime.now() 
     for key in list_accounts:
-        current_time = int(now_time.strftime("%H")) - data_json[key]["time_zone"]
+        current_time = now_time.hour - data_json[key]["time_zone"]
         if (current_time == config.time_mailing) or (user_id):
             balance = data_json[key]["balance"]
             for id in data_json[key]["account_id"]:
