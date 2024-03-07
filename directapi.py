@@ -23,9 +23,9 @@ def getBalance(nameAccount, data_json):
          'Content-Type': 'application/json'
       })
    
-   print("Статус ", r.status_code)
+   ## print("Статус ", r.status_code)
    if(r.status_code>=200):
-      print(r.json())
+      ## print(r.json())
       return r.json()['data']['Accounts'][0]['Amount']
    else:
       file_error = open("ErrorAPI.txt", "w+")

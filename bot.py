@@ -3,19 +3,19 @@ from telebot import types
 from datetime import datetime
 import config, threading, data_manager, os, time
 
-data = data_manager.readData()
-list_accounts = data_manager.getListAccounts(data)
+data = None
+list_accounts = None
 
 ## Обновить баланс в БД
 def UpdateBalance():
     global data
     global list_accounts
 
+    UpdateData()
     data = data_manager.setBalansInData(list_accounts, data)
     messageBalance(list_accounts, data, False)
     if os.path.isfile("ErrorAPI.txt"):
         ErrorMessage(data, "Проблемы с API")
-    UpdateData()
     TimerUpdateBalance()
 
 def UpdateData():
@@ -31,9 +31,11 @@ def TimerUpdateBalance():
     timer_update_balance.start() 
 
 def TimeСalibration():
-    if datetime.now().minute >= 1:
+    if datetime.now().minute > 1:
+        print(f"{datetime.now().minute} мин")
         return 3720 - datetime.now().minute * 60
     else: 
+        print(f"{datetime.now().minute} мин")
         return 3600
 
 ## Рассылка сообщение. Если user_id имеет значение int не 0 то сообщение шлется конкретному ID аккаунту
@@ -80,9 +82,9 @@ def dialog(message):
         bot.send_message(message.chat.id, 'Не знаю такой команды')
 
 
-# while True:
-#     try:
-#         bot.polling(none_stop=True)
-#     except Exception as e:
-#         time.sleep(3)
-#         print(e)
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        time.sleep(3)
+        print(e)
