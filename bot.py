@@ -10,11 +10,20 @@ list_accounts = data_manager.getListAccounts(data)
 def UpdateBalance():
     global data
     global list_accounts
+
     data = data_manager.setBalansInData(list_accounts, data)
     messageBalance(list_accounts, data, False)
     if os.path.isfile("ErrorAPI.txt"):
         ErrorMessage(data, "Проблемы с API")
+    UpdateData()
     TimerUpdateBalance()
+
+def UpdateData():
+    global data
+    global list_accounts
+
+    data = data_manager.readData()
+    list_accounts = data_manager.getListAccounts(data)
     
 ## Таймер. Кадый час запускает обновление баланса в БД
 def TimerUpdateBalance():  
@@ -23,7 +32,7 @@ def TimerUpdateBalance():
 
 def TimeСalibration():
     if datetime.now().minute >= 1:
-        return 3660 - datetime.now().minute * 60
+        return 3720 - datetime.now().minute * 60
     else: 
         return 3600
 
@@ -71,9 +80,9 @@ def dialog(message):
         bot.send_message(message.chat.id, 'Не знаю такой команды')
 
 
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except Exception as e:
-        time.sleep(3)
-        print(e)
+# while True:
+#     try:
+#         bot.polling(none_stop=True)
+#     except Exception as e:
+#         time.sleep(3)
+#         print(e)
